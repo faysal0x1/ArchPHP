@@ -5,7 +5,10 @@ require BASE_PATH . 'Core/functions.php';
 
 
 spl_autoload_register(static function ($class) {
-	$file = base_path("Core/" . $class . '.php');
+	$class = str_replace('\\', DIRECTORY_SEPARATOR, $class);
+
+	$file = BASE_PATH . $class . '.php';
+
 	if (file_exists($file)) {
 		require $file;
 	}
@@ -13,6 +16,3 @@ spl_autoload_register(static function ($class) {
 
 
 require BASE_PATH . ('Core/router.php');
-
-
-
