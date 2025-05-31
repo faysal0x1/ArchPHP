@@ -18,6 +18,8 @@ function redirect($path): void {
 	exit;
 }
 
+
+
 function view($view, $data = []): void {
 	extract($data);
 	require "views/{$view}.view.php";

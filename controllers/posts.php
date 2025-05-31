@@ -8,6 +8,12 @@ $db = new Database($config['database'], $config['database']['username'], $config
 
 $heading = 'Posts Page';
 
-$posts = $db->query('SELECT * FROM posts')->fetchAll();
+$posts = $db->query('SELECT * FROM posts')->get();
 
 include 'views/posts.view.php';
+
+
+//view('posts', [
+//	'heading' => $heading,
+//	'posts' => $posts
+//]);

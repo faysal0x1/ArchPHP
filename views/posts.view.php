@@ -24,6 +24,15 @@
 				<?php endforeach; ?>
 			</div>
 
+			<!--			// Create Note Button-->
+
+			<div class='mt-6'>
+				<a href='/post/create'
+				   class='inline-flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700'>
+					Create New Post
+				</a>
+			</div>
+
 		</div>
 	</main>
 
