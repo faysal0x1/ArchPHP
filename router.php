@@ -6,6 +6,8 @@ $routes = [
 	'/' => 'controllers/index.php',
 	'/about' => 'controllers/about.php',
 	'/contact' => 'controllers/contact.php',
+	'/posts' => 'controllers/posts.php',
+	'/post' => 'controllers/post.php',
 ];
 
 
@@ -18,9 +20,9 @@ function routeToController($uri, $routes): void {
 
 }
 
-function abort($message, $code = 404) {
+function abort( $code = 404) {
 	http_response_code($code);
-	require 'views/404.view.php';
+	require "views/{$code}.view.php";
 	exit;
 }
 
