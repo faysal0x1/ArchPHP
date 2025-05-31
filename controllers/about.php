@@ -3,4 +3,6 @@
 $heading = 'About Us';
 
 
-require_once 'views/about.view.php';
+require view('about.view.php', [
+	'heading' => $heading,
+]);

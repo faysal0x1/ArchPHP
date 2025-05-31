@@ -19,14 +19,20 @@ function redirect($path): void {
 }
 
 
-
-function view($view, $data = []): void {
-	extract($data);
-	require "views/{$view}.view.php";
-}
-
 function authorize(bool $condition, $status = Response::FORBIDDEN): void {
 	if (!$condition) {
 		abort($status);
 	}
 }
+
+function base_path($path = ''): string {
+	return BASE_PATH . $path;
+
+}
+
+function view($path, $data = []): string {
+	extract($data);
+	return base_path("views/{$path}");
+}
+
+

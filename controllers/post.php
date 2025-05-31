@@ -1,6 +1,6 @@
 <?php
 
-$config = require 'config.php';
+$config = require base_path('config.php');
 
 $db = new Database($config['database'], $config['database']['username'], $config['database']['password']);
 
@@ -17,4 +17,7 @@ $post = $db->query('SELECT * FROM posts WHERE id = :id', ['id' => $postId])
 authorize($post['user_id'] === $currntUserId);
 
 
-include 'views/post.view.php';
+require view('post.view.php', [
+	'heading' => $heading,
+	'post' => $post
+]);

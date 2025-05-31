@@ -4,7 +4,7 @@ require('Validator.php');
 $heading = 'Create Post';
 $errors = [];
 
-$config = require 'config.php';
+$config = require base_path('config.php');
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -50,5 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 }
 
-
-require 'views/post-create.view.php';
+require view('post-create.view.php', [
+	'heading' => $heading,
+]);
