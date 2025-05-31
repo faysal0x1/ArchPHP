@@ -1,9 +1,8 @@
 <?php
 
 const BASE_PATH = __DIR__ . '/../';
-require BASE_PATH . 'functions.php';
-//require base_path('Response.php');
-//require base_path('Database.php');
+require BASE_PATH . 'Core/functions.php';
+
 
 spl_autoload_register(static function ($class) {
 	$file = base_path("Core/" . $class . '.php');
@@ -13,7 +12,7 @@ spl_autoload_register(static function ($class) {
 });
 
 
-require base_path('router.php');
+require BASE_PATH . ('Core/router.php');
 
 
 
