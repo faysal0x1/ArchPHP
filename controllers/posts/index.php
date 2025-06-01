@@ -9,7 +9,7 @@ $db = new Database($config['database'], $config['database']['username'], $config
 
 $heading = 'Posts Page';
 
-$posts = $db->query('SELECT * FROM posts')->get();
+$posts = $db->query('SELECT * FROM posts ORDER BY created_at DESC')->get();
 
 
 require view('posts/index.view.php', [

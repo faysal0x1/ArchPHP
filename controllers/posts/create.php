@@ -1,6 +1,8 @@
 <?php
+
 use Core\Database;
-require('Validator.php');
+use Core\Validator;
+
 
 $heading = 'Create Post';
 $errors = [];
@@ -44,13 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			'status' => $status
 		]);
 
-
-		ret
+		redirect('posts');
 	}
-
-
 }
 
-require view('posts/post-create.view.php', [
+require view('posts/create.view.php', [
 	'heading' => $heading,
 ]);

@@ -17,11 +17,23 @@
 			<p class='mt-4 text-sm text-gray-500'>
 				Posted on <?= date('F j, Y', strtotime($post['created_at'])) ?></p>
 		</div>
-		<div class='mt-6'>
-			<a href='/posts' class='text-blue-600 hover:underline'>Back to Posts</a>
-		</div>
 
-	</div>
+		<!-- // Delete Button -->
+
+		<div class='mt-6'>
+			<form method='POST' action='/post/delete?id=<?= $post['id'] ?>'>
+				<button type='submit'
+					class='inline-flex items-center px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700'>
+					Delete Post
+				</button>
+			</form>
+
+
+			<div class='mt-6'>
+				<a href='/posts' class='text-blue-600 hover:underline'>Back to Posts</a>
+			</div>
+
+		</div>
 </main>
 
 <?php require base_path('views/partials/footer.php'); ?>

@@ -8,6 +8,13 @@
 		<h1 class='text-3xl font-bold tracking-tight text-gray-900'>
 			Posts Page
 		</h1>
+
+		<div class='mt-6'>
+			<a href='/post/create'
+				class='inline-flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700'>
+				Create New Post
+			</a>
+		</div>
 		<!--// Showing All Posts at Card-->
 
 		<div class='mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
@@ -25,12 +32,7 @@
 
 		<!--			// Create Note Button-->
 
-		<div class='mt-6'>
-			<a href='/post/create'
-				class='inline-flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700'>
-				Create New Post
-			</a>
-		</div>
+
 
 	</div>
 </main>

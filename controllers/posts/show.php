@@ -17,7 +17,7 @@ $currntUserId = 1;
 $post = $db->query('SELECT * FROM posts WHERE id = :id', ['id' => $postId])
 	->findOrFail();
 
-authorize($post['user_id'] === $currntUserId);
+// authorize($post['user_id'] === $currntUserId);
 
 
 require view('posts/show.view.php', [
