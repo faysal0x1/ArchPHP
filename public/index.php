@@ -15,6 +15,8 @@ spl_autoload_register(static function ($class) {
 });
 
 
+require BASE_PATH . 'bootstrap.php';
+
 //require BASE_PATH . ('Core/router.php');
 
 

@@ -18,6 +18,14 @@
 				Posted on <?= date('F j, Y', strtotime($post['created_at'])) ?></p>
 		</div>
 
+		<!-- // Edit Button -->
+		<div class='mt-6'>
+			<a href='/post/edit?id=<?= htmlspecialchars($post['id']) ?>'
+				class='inline-flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700'>
+				Edit Post
+			</a>
+		</div>
+
 		<!-- // Delete Button -->
 
 		<div class='mt-6'>

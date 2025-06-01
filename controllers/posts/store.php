@@ -2,8 +2,9 @@
 
 use Core\Database;
 use Core\Validator;
+use Core\App;
 
-$config = require base_path('config.php');
+$db = App::resolve(Database::class);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['title'] ?? '');
@@ -33,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors)) {
-        $db = new Database($config['database'], $config['database']['username'], $config['database']['password']);
         $db->query('INSERT INTO posts (title, description, user_id, status) VALUES (:title, :description, :user_id, :status)', [
             'title' => $title,
             'description' => $description,
