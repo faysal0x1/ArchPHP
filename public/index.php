@@ -23,8 +23,6 @@ require BASE_PATH . 'bootstrap.php';
 $router = new Core\Router();
 $routes = require base_path('routes.php');
 
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-$method = $_SERVER['_method'] ?? $_SERVER['REQUEST_METHOD'];
-
-$router->route($uri, $method);
+$request = Symfony\Component\HttpFoundation\Request::createFromGlobals();
+$response = $router->dispatch($request);
+$response->send();

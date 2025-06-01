@@ -2,52 +2,54 @@
 <?php require base_path('views/partials/nav.php'); ?>
 <?php require base_path('views/partials/banner.php'); ?>
 
-
 <main>
-	<div class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
-		<!-- Your content -->
-		<h1 class='text-3xl font-bold tracking-tight text-gray-900'>Create Post </h1>
+	<div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+		<div class="bg-white shadow rounded-lg p-6">
+			<h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-4">
+				Create New Post
+			</h1>
 
-		<p class='mt-4 text-gray-600'>Welcome to your post creation page! Here you can create a new post.</p>
+			<form method="POST" action="/post/store" class="space-y-6">
+				<div>
+					<label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+					<input type="text"
+						name="title"
+						id="title"
+						required
+						value="<?= htmlspecialchars($old['title'] ?? '') ?>"
+						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+				</div>
 
-		<!-- Form to create a new note -->
-		<form action="/post/store" method="POST" class="mt-6">
-			<div class="mb-4">
-				<label for="title" class="block text-sm font-medium text-gray-700">Title</label>
-				<input type="text" id="title" name="title" required
-					class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-			</div>
-			<div class="mb-4">
-				<label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-				<textarea id="description" name="description" rows="4" required
-					class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
-			</div>
+				<div>
+					<label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+					<textarea name="description"
+						id="description"
+						rows="4"
+						required
+						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"><?= htmlspecialchars($old['description'] ?? '') ?></textarea>
+				</div>
 
+				<?php if (!empty($errors)): ?>
+					<div class="text-red-500">
+						<?php foreach ($errors as $error): ?>
+							<p><?= htmlspecialchars($error) ?></p>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
 
-			<div class="mb-4">
-				<label for="user_id" class="block text-sm font-medium text-gray-700">User ID</label>
-				<input type="number" id="user_id" name="user_id" required
-					class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-			</div>
-
-
-			<div class="mb-4">
-				<label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-				<select id="status" name="status"
-					class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-					<option value="draft">Draft</option>
-					<option value="published">Published</option>
-				</select>
-			</div>
-
-			<div class="mb-4">
-				<button type="submit"
-					class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700">
-					Create Note
-				</button>
-			</div>
-		</form>
-
+				<div class="flex justify-end space-x-4">
+					<a href="/posts"
+						class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+						Cancel
+					</a>
+					<button type="submit"
+						class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700">
+						Create Post
+					</button>
+				</div>
+			</form>
+		</div>
 	</div>
 </main>
+
 <?php require base_path('views/partials/footer.php'); ?>

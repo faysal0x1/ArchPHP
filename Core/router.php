@@ -2,103 +2,112 @@
 
 namespace Core;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+
 class Router
 {
+	private RouteCollection $routes;
+	private RequestContext $context;
+	private array $middlewares = [];
 
-	protected $routes = [];
-	protected $basePath;
-
-	public function __construct($basePath = '')
+	public function __construct()
 	{
-		$this->basePath = $basePath;
+		$this->routes = new RouteCollection();
+		$this->context = new RequestContext();
 	}
 
-	/**
-	 * Register a route with the router.
-	 *
-	 * @param string          $uri        The URI for the route.
-	 * @param string|callable $controller The controller to handle the route.
-	 * @return void
-	 */
-
-	public function add($method, $uri, $controller)
+	public function get(string $path, $handler, array $middlewares = []): void
 	{
-		if (!is_string($controller) && !is_callable($controller)) {
-			throw new \InvalidArgumentException("Controller must be a string or callable.");
-		}
-
-		if (empty($uri)) {
-			throw new \InvalidArgumentException('URI must be provided for routes.');
-		}
-
-		$this->routes[$uri] = [
-			'uri' => $uri,
-			'method' => strtoupper($method),
-			'controller' => $controller
-		];
+		$this->addRoute('GET', $path, $handler, $middlewares);
 	}
 
-
-	public function get($uri, $controller)
+	public function post(string $path, $handler, array $middlewares = []): void
 	{
-		$this->add('GET', $uri, $controller);
+		$this->addRoute('POST', $path, $handler, $middlewares);
 	}
 
-	public function post($uri, $controller)
+	public function put(string $path, $handler, array $middlewares = []): void
 	{
-		if (empty($uri) || empty($controller)) {
-			throw new \InvalidArgumentException('URI and controller must be provided for POST routes.');
-		}
-
-		$this->add('POST', $uri, $controller);
+		$this->addRoute('PUT', $path, $handler, $middlewares);
 	}
 
-	public function put($uri, $controller)
+	public function patch(string $path, $handler, array $middlewares = []): void
 	{
-		if (!is_string($controller) && !is_callable($controller)) {
-			throw new \InvalidArgumentException("Controller must be a string or callable.");
-		}
-
-		$this->add('PUT', $uri, $controller);
+		$this->addRoute('PATCH', $path, $handler, $middlewares);
 	}
 
-	public function patch($uri, $controller)
+	public function delete(string $path, $handler, array $middlewares = []): void
 	{
-		if (!is_string($controller) && !is_callable($controller)) {
-			throw new \InvalidArgumentException("Controller must be a string or callable.");
-		}
-
-		$this->add('PATCH', $uri, $controller);
+		$this->addRoute('DELETE', $path, $handler, $middlewares);
 	}
 
-	public function delete($uri, $controller)
+	private function addRoute(string $method, string $path, $handler, array $middlewares): void
 	{
-		if (empty($uri) || empty($controller)) {
-			throw new \InvalidArgumentException('URI and controller must be provided for DELETE routes.');
-		}
-		$this->add('DELETE', $uri, $controller);
+		$route = new Route($path, ['_controller' => $handler]);
+		$route->setMethods($method);
+		$route->setOption('middlewares', $middlewares);
+
+		$this->routes->add($method . $path, $route);
 	}
 
-	public function route($uri, $method = 'GET')
+	public function dispatch(Request $request): Response
 	{
-		// Handle method spoofing for DELETE, PUT, PATCH via _method field
-		if ($method === 'POST' && isset($_POST['_method'])) {
-			$method = strtoupper($_POST['_method']);
-		}
+		// Debug information
+		error_log('Original request method: ' . $request->getMethod());
+		error_log('Request path: ' . $request->getPathInfo());
+		error_log('Request body: ' . print_r($request->request->all(), true));
+		error_log('Request headers: ' . print_r($request->headers->all(), true));
+		error_log('Available routes: ' . print_r($this->routes->all(), true));
 
-		foreach ($this->routes as $route) {
-			if ($route['uri'] === $uri && $route['method'] === strtoupper($method)) {
-				return require base_path($route['controller']);
+		// Handle method override for PATCH and DELETE
+		if ($request->isMethod('POST')) {
+			$method = $request->request->get('_method');
+			error_log('Method override: ' . $method);
+			if ($method === 'PATCH' || $method === 'DELETE') {
+				$request->setMethod($method);
+				error_log('New request method: ' . $request->getMethod());
 			}
 		}
 
-		// If no route found, return 404
-		$this->abort(404);
-	}
+		$this->context->fromRequest($request);
+		$matcher = new UrlMatcher($this->routes, $this->context);
 
-	protected function abort($code = 404)
-	{
-		http_response_code($code);
-		return require base_path('views/' . $code . '.view.php');
+		try {
+			$parameters = $matcher->match($request->getPathInfo());
+			error_log('Matched route parameters: ' . print_r($parameters, true));
+			$handler = $parameters['_controller'];
+			unset($parameters['_controller']);
+
+			$content = null;
+			if (is_array($handler)) {
+				[$controller, $method] = $handler;
+				error_log('Controller: ' . $controller . ', Method: ' . $method);
+				$controller = new $controller();
+				$content = $controller->$method();
+			} elseif (is_string($handler)) {
+				$content = require $handler;
+			} else {
+				$content = $handler();
+			}
+
+			// If content is already a Response object, return it
+			if ($content instanceof Response) {
+				return $content;
+			}
+
+			// Otherwise, wrap the content in a Response object
+			return new Response($content);
+		} catch (\Exception $e) {
+			// Add debug information
+			error_log('Route not found: ' . $request->getMethod() . ' ' . $request->getPathInfo());
+			error_log('Available routes: ' . print_r($this->routes->all(), true));
+			error_log('Exception: ' . $e->getMessage());
+			throw new \Exception('Route not found', 404);
+		}
 	}
 }

@@ -1,20 +1,27 @@
 <?php
 
-use Core\App;
-use Core\Container;
+require_once __DIR__ . '/vendor/autoload.php';
 
-$container = new Core\Container();
+use Dotenv\Dotenv;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
+// Load environment variables
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
-$container->bind('Core\Database', function () {
-    $config = require base_path('config.php');
-    return new Core\Database(
-        $config['database'],
-        $config['database']['username'],
-        $config['database']['password']
-    );
-});
+// Initialize database
+$capsule = new Capsule;
+$capsule->addConnection(require __DIR__ . '/config/database.php');
+$capsule->setAsGlobal();
+$capsule->bootEloquent();
 
+// Start session
+session_start();
 
+// Load routes
+$router = require __DIR__ . '/routes.php';
 
-App::setContainer($container);
+// Handle request
+$request = Symfony\Component\HttpFoundation\Request::createFromGlobals();
+$response = $router->dispatch($request);
+$response->send();
