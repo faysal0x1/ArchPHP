@@ -21,7 +21,11 @@
 		<!-- // Delete Button -->
 
 		<div class='mt-6'>
-			<form method='POST' action='/post/delete?id=<?= $post['id'] ?>'>
+			<form method='POST' action='/post/delete' class='bg-white shadow rounded-lg p-6'>
+				<h2 class='text-xl font-semibold text-gray-900 mb-4'>Delete Post</h2>
+				<input type='hidden' name='post_id' value='<?= htmlspecialchars($post['id']) ?>'>
+				<input type='hidden' name='_method' value='DELETE'>
+				<p class='text-red-600 mb-4'>Are you sure you want to delete this post?</p>
 				<button type='submit'
 					class='inline-flex items-center px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700'>
 					Delete Post

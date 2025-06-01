@@ -11,7 +11,7 @@
 		<p class='mt-4 text-gray-600'>Welcome to your post creation page! Here you can create a new post.</p>
 
 		<!-- Form to create a new note -->
-		<form action="/post/create" method="POST" class="mt-6">
+		<form action="/post/store" method="POST" class="mt-6">
 			<div class="mb-4">
 				<label for="title" class="block text-sm font-medium text-gray-700">Title</label>
 				<input type="text" id="title" name="title" required

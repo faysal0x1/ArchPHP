@@ -2,13 +2,11 @@
 
 use Core\Database;
 
-
 $config = require base_path('config.php');
-
 $db = new Database($config['database'], $config['database']['username'], $config['database']['password']);
 
-
 $heading = 'Post Page';
+
 
 $postId = $_GET['id'] ?? null;
 
@@ -18,7 +16,6 @@ $post = $db->query('SELECT * FROM posts WHERE id = :id', ['id' => $postId])
 	->findOrFail();
 
 // authorize($post['user_id'] === $currntUserId);
-
 
 require view('posts/show.view.php', [
 	'heading' => $heading,
