@@ -1,5 +1,7 @@
 <?php
 
+use Core\Database;
+
 
 $config = require base_path('config.php');
 
@@ -18,7 +20,7 @@ $post = $db->query('SELECT * FROM posts WHERE id = :id', ['id' => $postId])
 authorize($post['user_id'] === $currntUserId);
 
 
-require view('post.view.php', [
+require view('posts/show.view.php', [
 	'heading' => $heading,
 	'post' => $post
 ]);

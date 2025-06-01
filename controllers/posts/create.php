@@ -1,4 +1,5 @@
 <?php
+use Core\Database;
 require('Validator.php');
 
 $heading = 'Create Post';
@@ -50,6 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 }
 
-require view('post-create.view.php', [
+require view('posts/post-create.view.php', [
 	'heading' => $heading,
 ]);
